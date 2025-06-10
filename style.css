@@ -1,0 +1,84 @@
+
+    /* Entfernt Margin und Padding des Body */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto, Arial, sans-serif;
+}
+/* Optional: Farbe für die Navigation (falls ein Hintergrund sichtbar ist) */
+header {
+    background-color: #6200ee; /* Material Design Primärfarbe */
+    color: white;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 16px;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 90%;
+}
+.chart-wrapper {
+    min-height: 300px; /* Mindesthöhe für konsistentes Layout */
+    height: auto;      /* Höhe passt sich dem Inhalt an */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px;
+    background: #f9f9f9;
+}
+
+nav {
+    background-color: #6200ee;
+    color: white;
+    padding: 16px;
+    text-align: center;
+}
+nav h1 {
+    font-size: 24px;
+    margin: 0;
+}
+h3 {
+    margin: 8px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+/* Navigation Styling */
+.app-bar-navigation {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    color: #ffd700; /* Goldene Farbe beim Hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Leichte Transparenz beim Hover */
+}
+/* Stellt sicher, dass die Nav Bar direkt oben beginnt */
+.mdc-top-app-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Inhalt wird korrekt unterhalb der Nav Bar angezeigt */
+.mdc-top-app-bar--fixed-adjust {
+    margin-top: 64px;
+}/* Höhe der Top App Bar */

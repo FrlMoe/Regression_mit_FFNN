@@ -1,15 +1,273 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>TensorFlow.js Tutorial</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TensorFlow.js Visualization</title>
+
+  <!-- Material Design for Navbar and Layout -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-components-web@latest/dist/material-components-web.min.css">
 
   <!-- Import TensorFlow.js -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
   <!-- Import tfjs-vis -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- Import the main script file -->
+
+
+<!-- Material Top App Bar -->
+<header class="mdc-top-app-bar">
+  <div class="mdc-top-app-bar__row">
+    <!-- Titel der App -->
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+      <span class="mdc-top-app-bar__title">Regression mit FFNN</span>
+    </section>
+
+    <!-- Navigation -->
+    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+      <nav class="app-bar-navigation">
+        <a href="#card1" class="nav-link">Modelle</a>
+        <a href="#card2" class="nav-link">Diskussion</a>
+        <a href="#card3" class="nav-link">Dokumentation</a>
+        <a href="#card4" class="nav-link">Quellen</a>
+      </nav>
+    </section>
+  </div>
+</header>
+
+<main class="main-container mdc-top-app-bar--fixed-adjust">
+  <!-- Grid für Plots -->
+  <section id="card1" class="grid-container">
+
+    <!-- R1: Clean vs Noisy Daten -->
+    <div class="chart-wrapper">
+      <h3>R1: Clean Data (Train/Test)</h3>
+      <div id="clean-data"></div>
+    </div>
+    <div class="chart-wrapper">
+      <h3>R1: Noisy Data (Train/Test)</h3>
+      <div id="noisy-data"></div>
+    </div>
+
+    <!-- R2: Vorhersage auf unverrauschten Daten -->
+    <div class="chart-wrapper">
+      <h3>R2: Prediction without Noise (Train)</h3>
+      <div id="prediction-clean-train"></div>
+      <p id="loss-clean-train">Loss (MSE): calculating...</p>
+        <!-- Neuer Loss-Line-Plot -->
+        <canvas id="loss-chart-r2" width="400" height="200"></canvas>
+
+    </div>
+    <div class="chart-wrapper">
+      <h3>R2: Prediction without Noise (Test)</h3>
+      <div id="prediction-clean-test"></div>
+      <p id="loss-clean-test">Loss (MSE): calculating...</p>
+        <!-- Neues MSE-Bar-Chart -->
+        <canvas id="mse-chart-r2" width="400" height="200"></canvas>
+
+    </div>
+
+    <!-- R3: Vorhersage auf verrauschten Daten (bestes Modell) -->
+    <div class="chart-wrapper">
+      <h3>R3: Best Model Prediction (Train)</h3>
+      <div id="prediction-noisy-train"></div>
+      <p id="loss-noisy-train">Loss (MSE): calculating...</p>
+        <canvas id="loss-chart-r3" width="400" height="200"></canvas>
+        <!-- Neues MSE-Bar-Chart -->
+
+
+    </div>
+    <div class="chart-wrapper">
+      <h3>R3: Best Model Prediction (Test)</h3>
+      <div id="prediction-noisy-test"></div>
+      <p id="loss-noisy-test">Loss (MSE): calculating...</p>
+        <canvas id="mse-chart-r3" width="400" height="200"></canvas>
+    </div>
+
+    <!-- R4: Overfit-Modell -->
+    <div class="chart-wrapper">
+      <h3>R4: Overfit Model Prediction (Train)</h3>
+      <div id="overfit-train"></div>
+      <p id="loss-overfit-train">Loss (MSE): calculating...</p>
+        <canvas id="loss-chart-r4" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-wrapper">
+      <h3>R4: Overfit Model Prediction (Test)</h3>
+      <div id="overfit-test"></div>
+      <p id="loss-overfit-test">Loss (MSE): calculating...</p>
+        <!-- Neues MSE-Bar-Chart -->
+        <canvas id="mse-chart-r4" width="400" height="200"></canvas>
+    </div>
+
+  </section>
+
+  <section id="card2" class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div class="mdc-card discussion-card">
+                <div class="mdc-card__content">
+                    <h2 class="mdc-typography--headline6"><strong>Diskussion</strong></h2>
+                    <div class="discussion-section">
+                        <p class="mdc-typography--body1">
+                            Bei der Durchführung der vier Teilaufgaben zeigte sich deutlich, wie sich verschiedene Faktoren wie Rauschen, Datenmenge und Trainingsdauer auf das Verhalten neuronaler Netze bei Regressionsaufgaben auswirken. Besonders beim Overfitting-Experiment wurde sichtbar, dass eine zu lange Trainingszeit bei verrauschten und kleinen Datensätzen zu einer starken Überanpassung führen kann. Auch die grafischen Vorhersagen machten deutlich, dass überangepasste Modelle das Rauschen in den Trainingsdaten nahezu exakt abbilden, aber auf unbekannte Daten schlecht generalisieren. Durch bewusste Variation von Parametern, etwa durch Erhöhung des Rauschens und Reduktion der Datenmenge, konnte dieses Verhalten gezielt nachvollzogen werden. Die Aufgaben zeigten, wie wichtig eine geeignete Datenaufbereitung und eine klare Trennung von Trainings- und Testdaten sind. Die Ergebnisse verdeutlichen zudem, dass eine niedrige Trainings-Fehlerrate kein Garant für ein leistungsfähiges Modell ist. Auch die Wahl der Modellarchitektur und der Trainingsstrategie spielt eine entscheidende Rolle. Insgesamt wurde ein vertieftes Verständnis für die Herausforderungen bei der Modellierung mit neuronalen Netzen und der Notwendigkeit gut begründeter Parameterentscheidungen vermittelt.                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="card3" class="mdc-layout-grid">
+    <div class="mdc-layout-grid__inner">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div class="mdc-card documentation-card">
+                <div class="mdc-card__content">
+                    <h2 class="mdc-typography--headline6"><strong>Dokumentation</strong></h2>
+                    <div class="documentation-section">
+                        <!-- Technischer Teil -->
+                        <h3 class="mdc-typography--subtitle1"><strong>Technik</strong></h3>
+                        <p class="mdc-typography--body1">
+                            In dieser Webanwendung wurden folgende Frameworks und Bibliotheken verwendet:
+                        </p>
+                        <ul>
+                            <li><strong>TensorFlow.js</strong><br>
+                                Wird zur Erstellung, zum Training und zur Auswertung eines Feedforward-Neural-Networks direkt im Browser verwendet. Die Bibliothek ermöglicht maschinelles Lernen mit JavaScript, ohne Backend oder Server-Anbindung.
+                            </li>
+                            <li><strong>tfjs-vis</strong><br>
+                                Unterstützt die visuelle Darstellung von Trainingsmetriken wie Loss oder Accuracy. In deinem Projekt nutzt du es zur Anzeige der Modellmetriken während des Trainings, z. B. zur Verfolgung des Mean Squared Error.
+                            </li>
+                            <li><strong>Chart.js</strong><br>
+                                Dient zur Visualisierung von Eingabedaten sowie der Modellvorhersagen in Form von Scatterplots. Die Diagramme zeigen z. B. Unterschiede zwischen Trainings- und Testdaten sowie zwischen clean und noisy data.
+                            </li>
+                            <li><strong>Material Components Web (Material IO)</strong><br>
+                                Wird zur Gestaltung des Layouts und der Benutzeroberfläche verwendet. Buttons, Navigation und Layout-Komponenten folgen den Material-Design-Richtlinien, um eine moderne, klare UI zu ermöglichen.
+                            </li>
+                            <li><strong>Google Material Icons</strong><br>
+                                Ermöglicht die Nutzung von standardisierten Icons (z. B. für Buttons oder Navigationsleisten), die zum Material-Design-Framework gehören und visuelle Konsistenz schaffen.
+                            </li>
+                        </ul>
+                        <p class="mdc-typography--body1">
+                            <strong>Technische Besonderheiten:</strong>
+                        </p>
+                        <ul>
+                            <li><strong>Verwendung von TensorFlow.js zur Regression:</strong> Das Projekt implementiert ein Feed-Forward Neural Network (FFNN) direkt im Browser mit TensorFlow.js – vollständig clientseitig und ohne Backend.</li>
+
+                            <li><strong>Verwendung von Chart.js zur Ergebnisvisualisierung:</strong> Die Bibliothek <code>Chart.js</code> wird eingesetzt, um die Trainingsverläufe und Endergebnisse übersichtlich darzustellen.</li>
+
+                            <li><strong>Verlauf des Trainings- und Validierungsfehlers:</strong> Ein Line Chart zeigt den Verlauf des Loss-Werts pro Epoche getrennt für Trainings- und Testdaten, was eine direkte Einschätzung von Under- oder Overfitting ermöglicht.</li>
+
+                            <li><strong>Vergleich von finalem Train- und Test-MSE:</strong> Ein Bar-Chart stellt die mittlere quadratische Abweichung (MSE) nach Trainingsende gegenüber – für Training und Test – zur schnellen Bewertung der Generalisierungsleistung des Modells.</li>
+
+                            <li><strong>Selbstgenerierte Trainingsdaten:</strong> Anstelle eines vorgegebenen Datensatzes werden Trainingsdaten mit gezielt eingebautem Rauschen synthetisch erzeugt, um verschiedene Lernszenarien zu simulieren (clean vs. noisy).</li>
+
+                            <li><strong>Mehrere Modelle für Vergleichbarkeit:</strong> Es werden verschiedene Modelle trainiert und ausgewertet – u. a. ein Standardmodell, ein Modell mit Overfitting (ohne Early Stopping), und eines mit noisy Daten.</li>
+
+                            <li><strong>Zweispaltiges responsives Layout:</strong> Die Diagramme und Visualisierungen werden in einem zweispaltigen Layout dargestellt, das Übersichtlichkeit und Vergleichbarkeit zwischen den Modellen unterstützt.</li>
+
+                            <li><strong>Normierung der Eingabedaten:</strong> Vor dem Training werden alle Daten normalisiert, um stabilere Trainingsverläufe und bessere Konvergenz des Modells zu gewährleisten.</li>
+
+                            <li><strong>Unterscheidung von vier Ergebnisgruppen (R1–R4):</strong> Die Ergebnisse werden in vier klar getrennte Gruppen visualisiert (saubere Daten, Vorhersage auf sauberen Daten, bestes Modell auf noisy Daten, Overfit-Modell), um unterschiedliche Trainingsszenarien vergleichbar zu machen.</li>
+                        </ul><br><br>
+
+
+                        <!-- Fachlicher Teil -->
+                        <h3 class="mdc-typography--subtitle1"><strong>Fachlich</strong></h3>
+                      <p class="mdc-typography--body1">
+                        <strong>Implementierung der Logik</strong>
+                      </p>
+                        Für die Umsetzung der Regression mit FFNN wurde ein eigenes Projekt in HTML, CSS und JavaScript realisiert. Ziel war es, verschiedene Szenarien des Modellverhaltens (R1–R4) unter kontrollierten Bedingungen zu simulieren und zu evaluieren. Dabei stand nicht nur das Modelltraining im Vordergrund, sondern auch die korrekte Erzeugung und Trennung von Datensätzen, die sinnvolle Visualisierung der Ergebnisse und die analytische Bewertung des Modellverhaltens. Grundlage für das Projekt ist das TensorFlow.js Framework, sowie das "Making predictions from 2d data"-Tutorial.<br><br>
+                        Zunächst wurde ein synthetischer Datensatz erzeugt. Dabei wurden sowohl „clean data“ (mit ideal linearem Zusammenhang und kaum Rauschen) als auch „noisy data“ (mit deutlich stärkerem, zufälligem Rauschen) generiert. Die Input-Werte (X) wurden mittels Min-Max-Normalisierung skaliert, um das Modelltraining zu stabilisieren. Die Zielwerte (Y) wurden nicht normalisiert, da dies eine zentrale Vorgabe der Aufgabenstellung war: Die Output-Werte sollten in ihrer Originalskala verbleiben, um bei der Modell-Prediktion keine Rücktransformation zu benötigen.
+                        Die Datenaufteilung erfolgte im Verhältnis 50:50 in Trainings- und Testdaten, um trotz kleiner Datenmengen eine sinnvolle Evaluierung beider Phasen (Training vs. Test) zu ermöglichen. Die Datengenerierung und -verteilung wurde vollständig eigenständig implementiert, um ein besseres Verständnis für den Einfluss verschiedener Rauschlevel sowie potenzieller Overfitting-Szenarien zu erlangen.<br><br>
+                        Das verwendete Modell ist ein Feed-Forward Neural Network (FFNN) mit zwei Hidden Layers mit jeweils 100 Neuronen und ReLU-Aktivierung, sowie einem linearen Output-Layer. Diese Architektur wurde gewählt, um sowohl lineare als auch nicht-lineare Zusammenhänge modellieren zu können, ohne zu komplex zu werden. Die Modelle wurden mit dem Adam-Optimizer trainiert, und als Loss-Funktion wurde der Mean Squared Error (MSE) verwendet.<br><br>
+                        Die Logik der Anwendung wurde in vier Ansätze (R1–R4) unterteilt, um verschiedene Effekte und Probleme beim Modelltraining zu untersuchen:<br><br>
+                        <strong>R1 – Clean Data/Noisy Data:</strong> In R1 wird untersucht, wie sich das Modellverhalten bei der Regression auf sauberen (clean) und gestörten (noisy) Daten unterscheidet. Zu diesem Zweck wurden zwei Versionen eines künstlich erzeugten Datensatzes verwendet. Beide Datensätze basieren auf derselben zugrunde liegenden Funktion, jedoch enthält die zweite Version zusätzlich zufällig generiertes Rauschen.
+                        Der Datensatz wurde jeweils in Trainings- und Testdaten aufgeteilt und als Scatterplot visualisiert. Die Gegenüberstellung der beiden Diagramme ermöglicht eine erste Einschätzung, inwiefern das Modell unter verschiedenen Bedingungen den funktionalen Zusammenhang erkennen und generalisieren kann.
+                        Ziel dieser ersten Teilaufgabe ist es, ein Gefühl für den Einfluss von Datenqualität auf das Lernverhalten eines Modells zu entwickeln und eine Basis für die Interpretation der späteren Vorhersagen und Fehlerverläufe zu schaffen.<br><br>
+                        <strong>R2 – Clean Data:</strong> In Aufgabe R2 wurde ein Feedforward Neural Network auf rauschfreien (clean) Trainingsdaten trainiert, um eine Regressionsfunktion zu approximieren. Ziel dieser Konstellation war es, die Modellleistung unter idealisierten Bedingungen zu analysieren – also ohne störende Einflüsse wie Datenrauschen oder Ausreißer.
+                        Der Lernprozess diente in erster Linie dem Verständnis der grundlegenden Modellanpassung. In einem solchen Szenario sollte das trainierte Modell auf den Testdaten eine ähnlich gute Leistung wie auf den Trainingsdaten erzielen.<br><br>
+                        Ein Overfitting ist bei rauschfreien Daten kaum zu erwarten, da:<br>
+                        – keine zufälligen Muster vorhanden sind, die das Modell fälschlicherweise lernen könnte,<br>
+                        – der zugrunde liegende Zusammenhang eindeutig und gleichmäßig ist,<br>
+                        – und sowohl Trainings- als auch Testdaten aus derselben (störungsfreien) Verteilung stammen.<br><br>
+                        Insgesamt verdeutlicht Aufgabe R2, wie ein neuronales Netz unter optimalen Bedingungen lernt – ein wichtiger Referenzpunkt zur späteren Einschätzung von Modellen, die mit verrauschten oder komplexeren Daten arbeiten.<br><br>
+                        <strong>R3 – Noisy Data, bestes Modell:</strong> In Aufgabe R3 wurde dieselbe Modellarchitektur wie in R2 verwendet, diesmal jedoch auf einem Datensatz mit gezielt eingebrachtem Rauschen trainiert. Ziel dieser Konfiguration war es, zu untersuchen, wie gut das zuvor optimierte Modell unter realistischeren Bedingungen – also bei verrauschten Eingabedaten – verallgemeinern kann. Die Hyperparameter wurden bewusst unverändert aus Aufgabe R2 übernommen, um den direkten Einfluss des Rauschens auf das Modellverhalten isoliert zu analysieren.
+                        Erwartungsgemäß fällt die Leistung des Modells im Vergleich zu den rauschfreien Daten spürbar ab: Sowohl der Trainings-MSE als auch der Test-MSE sind deutlich höher, und die Vorhersagen weichen stärker vom wahren Verlauf ab. Besonders auffällig ist, dass sich in den Randbereichen der Daten systematische Abweichungen zeigen – ein Hinweis darauf, dass das Modell dort weniger zuverlässige Schätzungen abgibt.
+                        Die Loss- und MSE-Kurven verlaufen unruhiger als in R2 und deuten auf ein komplexeres Lernproblem hin. Der Test-Loss liegt tendenziell über dem Trainings-Loss, was einen leichten Overfitting-Effekt andeutet – wenngleich dieser noch moderat ausfällt. Insgesamt ist das Modell zwar weiterhin in der Lage, gewisse Muster zu erkennen, seine Generalisierungsfähigkeit ist jedoch spürbar eingeschränkt.<br><br>
+                        Diese Aufgabe zeigt exemplarisch, wie sensibel ein neuronales Netz auf verrauschte Daten reagieren kann – selbst wenn die Modellarchitektur und Trainingsparameter zuvor unter idealen Bedingungen gut funktioniert haben. Sie macht deutlich, dass robuste Generalisierung nicht allein von der Architektur, sondern auch stark von der Qualität und Beschaffenheit der Daten abhängt.<br><br>
+                        <strong>R4 – Noisy Data, Overfit-Modell:</strong> In dieser vierten Teilaufgabe wurde gezielt ein Overfit-Modell trainiert. Ziel war es, ein neuronales Netz so lange auf verrauschten Trainingsdaten zu trainieren, bis ein typisches Overfitting-Verhalten sichtbar wird – also ein deutlich niedrigerer Fehler auf den Trainingsdaten im Vergleich zum Fehler auf den Testdaten. Hierzu wurde erneut ein mehrschichtiges Feedforward-Modell mit zwei Hidden Layers verwendet, wie bereits in den vorherigen Aufgaben.<br><br>
+                        Um den Overfitting-Effekt noch deutlicher hervorzuheben, wurde zusätzlich mit den Parametern der Datengenerierung experimentiert: Das Rauschen der Daten wurde von einem niedrigeren auf ein deutlich höheres Niveau erhöht, und gleichzeitig wurde die Datenmenge stark reduziert. Statt mit einer großen Anzahl an Trainingsbeispielen zu arbeiten, wurde das Modell nur mit einer kleinen Datenmenge trainiert. Diese gezielten Anpassungen – höheres Rauschen und weniger Daten – fördern Overfitting, da das Modell dadurch noch stärker dazu neigt, sich an die zufälligen Störungen in den Trainingsdaten anzupassen.<br><br>
+                        Im Verlauf des Trainings nahm der Trainingsfehler stetig ab, während der Fehler auf den Testdaten nach einer gewissen Anzahl an Epochen nicht weiter sank und schließlich stagnierte oder sogar leicht anstieg. Diese Entwicklung ist ein klassisches Indiz für Overfitting: Das Modell lernt nicht nur die zugrundeliegende Struktur der Daten, sondern auch das zufällige Rauschen – was die Generalisierungsfähigkeit auf unbekannte Daten verringert.
+                        Im Vergleich zu Aufgabe R2, bei der das Modell auf rauschfreie Daten trainiert und getestet wurde, ist die Vorhersagegüte auf den Testdaten hier deutlich schlechter. In R2 wurde die zugrundeliegende Funktion gut gelernt und generalisiert, während in R4 das Modell überangepasst ist. Auch im Vergleich zu R3 – wo das Modell ebenfalls mit verrauschten Daten trainiert wurde, aber eine moderate Trainingsdauer gewählt wurde – zeigt sich in R4 ein deutlich stärkeres Auseinanderdriften von Trainings- und Testfehlern.<br><br>
+                        Zusammenfassend demonstriert diese Aufgabe das Prinzip des Overfittings sehr deutlich: Längeres Training auf verrauschten und wenigen Trainingsdaten führt dazu, dass das Modell die Störungen in den Daten als relevante Muster interpretiert. Dies verschlechtert die Leistung auf neuen, unbekannten Daten, was im Kontext des maschinellen Lernens vermieden werden sollte – es sei denn, das Ziel ist, wie in diesem Fall, ein bewusst überangepasstes Modell zu erzeugen.<br><br>
+                        Ein zentrales Element der Anwendung war die grafische Auswertung der Trainings- und Testergebnisse, um die Modellleistung anschaulich darzustellen und interpretierbar zu machen. Für das Modelltraining wurde TensorFlow.js verwendet, während für die Visualisierung zwei verschiedene Bibliotheken zum Einsatz kamen:<br><br>
+                        Chart.js wurde genutzt, um:<br>
+                        – Line-Charts für den Verlauf von Loss und MSE über alle Epochen darzustellen – jeweils getrennt für Trainings- und Testdaten. Diese Lernkurven lieferten wichtige Hinweise auf Overfitting, schnelle Konvergenz oder stagnierendes Lernen.<br>
+                        – Bar-Charts zum direkten Vergleich des finalen Train- und Test-MSE zu erstellen, um die Generalisierungsfähigkeit des Modells besser einschätzen zu können.<br>
+                        – Scatter-Plots mit Regressionslinie (Prediction vs. Original) zu zeichnen – zur visuellen Beurteilung der Modellgüte in Bezug auf die reale Zielverteilung.<br><br>
+                        Zusätzlich wurde tfjs-vis, die Visualisierungsbibliothek von TensorFlow.js, verwendet, um während des Modelltrainings in der Konsole eine Live-Vorschau des Loss-Verlaufs für Training und Testdaten anzuzeigen. Diese integrierte Darstellung unterstützte die direkte Beobachtung des Lernprozesses bereits während der Modellanpassung.<br><br>
+
+
+                        <!-- Quellen-Bereich -->
+                      <h3 class="mdc-typography--subtitle1"><strong>Quellen</strong></h3>
+                      <p id= "card4" class="mdc-typography--body1">
+                        Im Rahmen der Entwicklung und Dokumentation dieser Anwendung wurden folgende Quellen genutzt:
+                      </p>
+                          <ul>
+                              <li>
+                                  TensorFlow.js:
+                                  <a href="https://www.tensorflow.org/js" target="_blank" rel="noopener noreferrer">
+                                      https://www.tensorflow.org/js
+                                  </a>
+                              </li>
+                              <li>
+                                  tfjs-vis:
+                                  <a href="https://github.com/tensorflow/tfjs-vis" target="_blank" rel="noopener noreferrer">
+                                      https://github.com/tensorflow/tfjs-vis
+                                  </a>
+                              </li>
+                              <li>
+                                  Chart.js:
+                                  <a href="https://www.chartjs.org/" target="_blank" rel="noopener noreferrer">
+                                      https://www.chartjs.org/
+                                  </a>
+                              </li>
+                              <li>
+                                  Material Components for the Web:
+                                  <a href="https://github.com/material-components/material-components-web" target="_blank" rel="noopener noreferrer">
+                                      https://github.com/material-components/material-components-web
+                                  </a>
+                              </li>
+                              <li>
+                                  Function Grapher – MathsIsFun:
+                                  <a href="https://www.mathsisfun.com/data/function-grapher.php" target="_blank" rel="noopener noreferrer">
+                                      https://www.mathsisfun.com/data/function-grapher.php
+                                  </a>
+                              </li>
+                              <li>
+                                  ChatGPT (OpenAI):
+                                  <a href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer">
+                                      https://chat.openai.com/
+                                  </a>
+                              </li>
+                          </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- Import Scripts -->
 <script src="script.js"></script>
+<script src="data.js"></script>
+<script src="model.js"></script>
+
 </body>
 </html>
